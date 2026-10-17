@@ -919,12 +919,36 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun exportMask(width: Int, height: Int): Bitmap {
+            // Map finger strokes to the actual FIT_CENTER image rectangle, not the whole preview card.
+            // This keeps the erased area aligned even when the photo has letterboxing or padding.
             val bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bm)
-            val sx = width / this.width.coerceAtLeast(1).toFloat()
-            val sy = height / this.height.coerceAtLeast(1).toFloat()
+            val viewW = this.width.coerceAtLeast(1).toFloat()
+            val viewH = this.height.coerceAtLeast(1).toFloat()
+            val padL = preview.paddingLeft.toFloat()
+            val padT = preview.paddingTop.toFloat()
+            val contentW = (preview.width - preview.paddingLeft - preview.paddingRight).coerceAtLeast(1).toFloat()
+            val contentH = (preview.height - preview.paddingTop - preview.paddingBottom).coerceAtLeast(1).toFloat()
+            val imageAspect = width.toFloat() / height.toFloat()
+            val contentAspect = contentW / contentH
+            val drawnW: Float
+            val drawnH: Float
+            if (imageAspect > contentAspect) {
+                drawnW = contentW
+                drawnH = contentW / imageAspect
+            } else {
+                drawnH = contentH
+                drawnW = contentH * imageAspect
+            }
+            val left = padL + (contentW - drawnW) / 2f
+            val top = padT + (contentH - drawnH) / 2f
+            val sx = width / drawnW.coerceAtLeast(1f)
+            val sy = height / drawnH.coerceAtLeast(1f)
             val mappedPath = Path(maskPath).apply {
-                transform(android.graphics.Matrix().apply { setScale(sx, sy) })
+                transform(android.graphics.Matrix().apply {
+                    setTranslate(-left, -top)
+                    postScale(sx, sy)
+                })
             }
             val p = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.WHITE
