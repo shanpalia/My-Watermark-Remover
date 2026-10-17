@@ -53,19 +53,19 @@ class MainActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(18), dp(14), dp(18), dp(16))
-            setBackgroundColor(Color.rgb(247, 255, 254))
+            setBackgroundColor(Color.rgb(255, 255, 255))
         }
         val scroll = ScrollView(this)
         val content = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         content.addView(TextView(this).apply {
-            text = "ShanPalia\nWatermark Remover"
+            text = "My Watermark Remover"
             textSize = 25f
-            setTextColor(Color.rgb(5, 97, 106))
+            setTextColor(Color.rgb(0, 145, 105))
             setPadding(0, 0, 0, dp(8))
             typeface = android.graphics.Typeface.DEFAULT_BOLD
         })
         content.addView(TextView(this).apply {
-            text = "Offline image cleanup • By ShanPalia"
+            text = "by PaliaAPK HUB  |  Developer By shanpalia\nOffline Image Cleanup"
             textSize = 14f
             setTextColor(Color.DKGRAY)
             setPadding(0, 0, 0, dp(12))
@@ -175,9 +175,9 @@ class MainActivity : AppCompatActivity() {
         val bitmap = resultBitmap ?: return toast("Remove a watermark first.")
         try {
             val values = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, "ShanPalia_Removed_${System.currentTimeMillis()}.png")
+                put(MediaStore.Images.Media.DISPLAY_NAME, "My_Watermark_Removed_${System.currentTimeMillis()}.png")
                 put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-                if (Build.VERSION.SDK_INT >= 29) put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/ShanPaliaWatermarkRemover")
+                if (Build.VERSION.SDK_INT >= 29) put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/MyWatermarkRemover")
             }
             val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
                 ?: throw IllegalStateException("Could not create output file.")
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
                     throw IllegalStateException("Could not save image.")
                 }
             }
-            status.text = "Saved to Pictures/ShanPaliaWatermarkRemover."
+            status.text = "Saved to Pictures/MyWatermarkRemover."
             toast("Image saved.")
         } catch (e: Exception) {
             status.text = "Save failed: ${e.message ?: "unknown error"}"
