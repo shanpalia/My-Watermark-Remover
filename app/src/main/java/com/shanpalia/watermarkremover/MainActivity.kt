@@ -365,150 +365,294 @@ class MainActivity : AppCompatActivity() {
         }
         val homeContent = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(0, 0, 0, dp(16))
+            setPadding(0, 0, 0, dp(18))
         }
-        val homeHero = LinearLayout(this).apply {
+
+        // Brand header inspired by the supplied reference; every primary action opens a real page.
+        val brandHeader = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(20), dp(20), dp(20), dp(22))
-            background = GradientDrawable(GradientDrawable.Orientation.TL_BR,
-                intArrayOf(Color.rgb(18, 59, 82), Color.rgb(23, 106, 103))).apply { cornerRadius = dp(28).toFloat() }
-            elevation = dp(4).toFloat()
+            setPadding(dp(2), dp(4), dp(2), dp(14))
         }
-        val heroBrand = LinearLayout(this).apply {
+        val brandTop = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
         }
-        heroBrand.addView(TextView(this).apply {
+        brandTop.addView(TextView(this).apply {
             text = "✦"
-            textSize = 23f
+            textSize = 26f
+            setTextColor(emerald)
             gravity = Gravity.CENTER
-            setTextColor(Color.WHITE)
-            background = rounded(Color.rgb(18, 201, 160), 15)
-        }, LinearLayout.LayoutParams(dp(48), dp(48)))
-        val brandCopy = LinearLayout(this).apply {
+        }, LinearLayout.LayoutParams(dp(34), dp(42)))
+        val brandName = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(12), 0, 0, 0)
+            setPadding(dp(7), 0, 0, 0)
         }
-        brandCopy.addView(TextView(this).apply {
-            text = "MY WATERMARK REMOVER"
-            textSize = 12f
-            letterSpacing = 0.07f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.WHITE)
+        brandName.addView(TextView(this).apply {
+            text = "My Watermark Remover"
+            textSize = 18f
+            typeface = android.graphics.Typeface.create("sans-serif-black", android.graphics.Typeface.BOLD)
+            setTextColor(ink)
         })
-        brandCopy.addView(TextView(this).apply {
-            text = "Branding by PaliaAPK HUB"
+        brandName.addView(TextView(this).apply {
+            text = "AI Image & Video Cleaner"
             textSize = 11f
-            setTextColor(Color.rgb(191, 225, 220))
-            setPadding(0, dp(3), 0, 0)
+            setTextColor(muted)
         })
-        heroBrand.addView(brandCopy, LinearLayout.LayoutParams(0, -2, 1f))
-        heroBrand.addView(TextView(this).apply {
-            text = if (openCvReady) "● READY" else "● CHECK"
+        brandTop.addView(brandName, LinearLayout.LayoutParams(0, -2, 1f))
+        brandTop.addView(TextView(this).apply {
+            text = "● FREE"
             textSize = 10f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.WHITE)
-            setPadding(dp(10), dp(7), dp(10), dp(7))
-            background = rounded(Color.rgb(39, 119, 111), 30)
+            setTextColor(Color.rgb(115, 87, 20))
+            setPadding(dp(11), dp(8), dp(11), dp(8))
+            background = rounded(Color.rgb(255, 242, 202), 30)
         })
-        homeHero.addView(heroBrand)
-        homeHero.addView(TextView(this).apply {
-            text = "Clean photos.\nKeep the moment."
-            textSize = 30f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.WHITE)
-            setLineSpacing(dp(1).toFloat(), 1f)
-            setPadding(0, dp(22), 0, dp(8))
-        })
-        homeHero.addView(TextView(this).apply {
-            text = "Remove unwanted marks from images — right on your phone."
-            textSize = 14f
-            setLineSpacing(dp(3).toFloat(), 1f)
-            setTextColor(Color.rgb(220, 240, 235))
-        })
-        homeHero.addView(TextView(this).apply {
-            text = "OFFLINE IMAGE CLEANUP  ·  DEVELOPER BY SHANPALIA"
-            textSize = 9f
-            letterSpacing = 0.025f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.rgb(166, 224, 211))
-            setPadding(0, dp(18), 0, 0)
-        })
-        homeContent.addView(homeHero, margins(bottom = 22))
-        homeContent.addView(TextView(this).apply {
-            text = "Welcome to your studio"
-            textSize = 21f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
+        brandHeader.addView(brandTop)
+        brandHeader.addView(TextView(this).apply {
+            text = "by PaliaAPK HUB   ·   Developer By shanpalia"
+            textSize = 11f
+            gravity = Gravity.CENTER
+            setTextColor(emerald)
+            setPadding(dp(10), dp(6), dp(10), dp(6))
+            background = rounded(Color.rgb(229, 249, 242), 30)
+        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })
+        homeContent.addView(brandHeader)
+
+        val hero = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(18), dp(18), dp(12), dp(18))
+            background = GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(218, 255, 245), Color.rgb(234, 248, 255))).apply { cornerRadius = dp(24).toFloat() }
+            elevation = dp(2).toFloat()
+        }
+        val heroCopy = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 0, dp(6), 0)
+        }
+        heroCopy.addView(TextView(this).apply {
+            text = "Remove\nwatermarks\nwith ease"
+            textSize = 25f
+            typeface = android.graphics.Typeface.create("sans-serif-black", android.graphics.Typeface.BOLD)
             setTextColor(ink)
-        }, margins(bottom = 4))
-        homeContent.addView(TextView(this).apply {
-            text = "Choose a tool to get started"
-            textSize = 13f
+            setLineSpacing(0f, 0.98f)
+        })
+        heroCopy.addView(TextView(this).apply {
+            text = "Clean photos offline on your phone."
+            textSize = 12f
             setTextColor(muted)
-        }, margins(bottom = 13))
-        var navigateToPage: ((Int) -> Unit)? = null
-        fun workspaceCard(icon: String, title: String, subtitle: String, page: Int, tint: Int): LinearLayout {
+            setPadding(0, dp(8), 0, dp(12))
+        })
+        heroCopy.addView(makeButton("Get started  →", true).apply {
+            textSize = 13f
+            setOnClickListener { navigateToPage?.invoke(1) }
+        }, LinearLayout.LayoutParams(-1, dp(44)))
+        hero.addView(heroCopy, LinearLayout.LayoutParams(0, -2, 1.08f))
+        val heroArt = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            setPadding(dp(6), dp(12), dp(6), dp(12))
+            background = rounded(Color.rgb(196, 244, 231), 20)
+        }
+        heroArt.addView(TextView(this).apply {
+            text = "▧"
+            textSize = 48f
+            gravity = Gravity.CENTER
+            setTextColor(Color.rgb(0, 157, 119))
+        })
+        heroArt.addView(TextView(this).apply {
+            text = "BEFORE  ›  AFTER"
+            textSize = 9f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            gravity = Gravity.CENTER
+            setTextColor(Color.rgb(0, 111, 85))
+        })
+        heroArt.addView(TextView(this).apply {
+            text = "✦  ✨"
+            textSize = 20f
+            gravity = Gravity.CENTER
+            setTextColor(Color.rgb(0, 180, 135))
+            setPadding(0, dp(6), 0, 0)
+        })
+        hero.addView(heroArt, LinearLayout.LayoutParams(0, dp(170), 0.92f))
+        homeContent.addView(hero, margins(bottom = 18))
+
+        homeContent.addView(TextView(this).apply {
+            text = "Choose your workspace"
+            textSize = 21f
+            typeface = android.graphics.Typeface.create("sans-serif-black", android.graphics.Typeface.BOLD)
+            setTextColor(ink)
+        }, margins(bottom = 10))
+
+        fun featureCard(icon: String, title: String, subtitle: String, buttonLabel: String, color: Int, action: () -> Unit): LinearLayout {
             val card = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER_VERTICAL
-                setPadding(dp(15), dp(15), dp(14), dp(15))
-                background = rounded(Color.WHITE, 22, Color.rgb(226, 236, 232), dp(1))
+                orientation = LinearLayout.VERTICAL
+                setPadding(dp(14), dp(14), dp(14), dp(14))
+                background = rounded(Color.WHITE, 22, Color.rgb(224, 239, 233), dp(1))
                 elevation = dp(2).toFloat()
                 isClickable = true
                 isFocusable = true
             }
             card.addView(TextView(this).apply {
                 text = icon
-                textSize = 25f
-                typeface = android.graphics.Typeface.DEFAULT_BOLD
+                textSize = 29f
                 gravity = Gravity.CENTER
-                setTextColor(tint)
-                background = rounded(Color.rgb(230, 248, 242), 17)
-            }, LinearLayout.LayoutParams(dp(58), dp(60)))
-            val info = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(dp(13), 0, dp(5), 0)
-            }
-            info.addView(TextView(this).apply {
+                setTextColor(color)
+                background = rounded(if (color == Color.rgb(0, 137, 100)) Color.rgb(222, 250, 240) else Color.rgb(225, 244, 255), 17)
+                setPadding(dp(8), dp(5), dp(8), dp(5))
+            }, LinearLayout.LayoutParams(dp(54), dp(54)))
+            card.addView(TextView(this).apply {
                 text = title
                 textSize = 17f
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
                 setTextColor(ink)
+                setPadding(0, dp(10), 0, dp(4))
             })
-            info.addView(TextView(this).apply {
+            card.addView(TextView(this).apply {
                 text = subtitle
                 textSize = 12f
                 setLineSpacing(dp(2).toFloat(), 1f)
                 setTextColor(muted)
-                setPadding(0, dp(4), 0, 0)
-            })
-            card.addView(info, LinearLayout.LayoutParams(0, -2, 1f))
-            card.addView(TextView(this).apply {
-                text = "›"
-                textSize = 30f
-                setTextColor(emerald)
-            })
-            card.setOnClickListener { navigateToPage?.invoke(page) }
+            }, LinearLayout.LayoutParams(-1, dp(43)))
+            card.addView(makeButton(buttonLabel, true).apply {
+                textSize = 12f
+                setOnClickListener { action() }
+            }, LinearLayout.LayoutParams(-1, dp(43)).apply { topMargin = dp(10) })
+            card.setOnClickListener { action() }
             return card
         }
-        homeContent.addView(workspaceCard("▧", "Photo cleanup", "Brush over a watermark and clean your image offline", 1, Color.rgb(0, 137, 100)), margins(bottom = 11))
-        homeContent.addView(workspaceCard("▶", "Video studio", "Open a video workspace and choose a clip", 2, Color.rgb(18, 106, 103)), margins(bottom = 11))
-        homeContent.addView(workspaceCard("⚙", "App settings", "Processing status, privacy and app information", 3, Color.rgb(18, 59, 82)), margins(bottom = 18))
-        val homeStatus = TextView(this).apply {
-            text = if (openCvReady) "✓  OFFLINE ENGINE READY" else "⚠  IMAGE ENGINE NEEDS ATTENTION"
-            textSize = 12f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.rgb(17, 116, 91))
-            setPadding(dp(15), dp(15), dp(15), dp(15))
-            background = rounded(Color.rgb(226, 248, 240), 17)
+        val featureRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.TOP
         }
-        homeContent.addView(homeStatus, margins(bottom = 10))
+        featureRow.addView(featureCard("▧", "Clean Image", "Select a photo and brush over unwanted marks.", "Select image  →", emerald) {
+            navigateToPage?.invoke(1)
+        }, LinearLayout.LayoutParams(0, -2, 1f).apply { marginEnd = dp(7) })
+        featureRow.addView(featureCard("▶", "Video Studio", "Choose a video clip for the workspace.", "Select video  →", Color.rgb(0, 139, 213)) {
+            navigateToPage?.invoke(2)
+        }, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = dp(7) })
+        homeContent.addView(featureRow, margins(bottom = 14))
+
         homeContent.addView(TextView(this).apply {
-            text = "Your photos stay on this device. Online AI and video cleanup will need their own processing engines."
-            textSize = 12f
-            setLineSpacing(dp(3).toFloat(), 1f)
+            text = "QUICK TOOLS"
+            textSize = 11f
+            letterSpacing = 0.12f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(muted)
-            setPadding(dp(3), dp(2), dp(3), dp(8))
+            setPadding(dp(2), dp(5), 0, dp(9))
+        })
+        val quickRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        fun quickTool(icon: String, label: String, action: () -> Unit): LinearLayout {
+            val tile = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = Gravity.CENTER
+                setPadding(dp(4), dp(10), dp(4), dp(10))
+                background = rounded(Color.WHITE, 16, Color.rgb(229, 239, 234), dp(1))
+                isClickable = true
+                isFocusable = true
+                setOnClickListener { action() }
+            }
+            tile.addView(TextView(this).apply {
+                text = icon
+                textSize = 24f
+                gravity = Gravity.CENTER
+                setTextColor(emerald)
+            })
+            tile.addView(TextView(this).apply {
+                text = label
+                textSize = 10f
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+                gravity = Gravity.CENTER
+                setTextColor(ink)
+                setPadding(0, dp(4), 0, 0)
+            })
+            return tile
+        }
+        listOf(
+            quickTool("▧", "Photo") { navigateToPage?.invoke(1) },
+            quickTool("✎", "Brush") { navigateToPage?.invoke(1) },
+            quickTool("↓", "Save") { saveResult() },
+            quickTool("▶", "Video") { navigateToPage?.invoke(2) },
+            quickTool("⚙", "Settings") { navigateToPage?.invoke(3) }
+        ).forEachIndexed { index, tile ->
+            quickRow.addView(tile, LinearLayout.LayoutParams(0, dp(82), 1f).apply {
+                if (index > 0) marginStart = dp(5)
+                if (index < 4) marginEnd = dp(2)
+            })
+        }
+        homeContent.addView(quickRow, margins(bottom = 14))
+
+        val privacyStrip = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(14), dp(13), dp(14), dp(13))
+            background = rounded(Color.rgb(255, 250, 231), 18, Color.rgb(247, 235, 194), dp(1))
+        }
+        privacyStrip.addView(TextView(this).apply {
+            text = "✦"
+            textSize = 27f
+            setTextColor(Color.rgb(194, 145, 34))
+            setPadding(0, 0, dp(10), 0)
+        })
+        val privacyCopy = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        privacyCopy.addView(TextView(this).apply {
+            text = "Private by design"
+            textSize = 15f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        })
+        privacyCopy.addView(TextView(this).apply {
+            text = "Offline image cleanup · no photo upload"
+            textSize = 11f
+            setTextColor(muted)
+            setPadding(0, dp(3), 0, 0)
+        })
+        privacyStrip.addView(privacyCopy, LinearLayout.LayoutParams(0, -2, 1f))
+        privacyStrip.addView(TextView(this).apply {
+            text = if (openCvReady) "READY ✓" else "CHECK"
+            textSize = 10f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(emerald)
+        })
+        homeContent.addView(privacyStrip, margins(bottom = 18))
+
+        val recentHeader = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        recentHeader.addView(TextView(this).apply {
+            text = "Recent files"
+            textSize = 19f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        }, LinearLayout.LayoutParams(0, -2, 1f))
+        recentHeader.addView(TextView(this).apply {
+            text = "Open images  ›"
+            textSize = 12f
+            setTextColor(emerald)
+            setOnClickListener { navigateToPage?.invoke(1) }
+        })
+        homeContent.addView(recentHeader, margins(bottom = 8))
+        homeContent.addView(TextView(this).apply {
+            text = "Your selected and cleaned photos will appear in your workspace. No sample files are shown."
+            textSize = 12f
+            setLineSpacing(dp(2).toFloat(), 1f)
+            setTextColor(muted)
+            setPadding(dp(14), dp(14), dp(14), dp(14))
+            background = rounded(Color.WHITE, 16, Color.rgb(229, 239, 234), dp(1))
+            setOnClickListener { navigateToPage?.invoke(1) }
+        }, margins(bottom = 12))
+
+        homeContent.addView(TextView(this).apply {
+            text = "MY WATERMARK REMOVER  ·  by PALIAAPK HUB  ·  DEVELOPER BY SHANPALIA"
+            textSize = 9f
+            letterSpacing = 0.02f
+            gravity = Gravity.CENTER
+            setTextColor(muted)
+            setPadding(dp(4), dp(8), dp(4), dp(8))
         })
         homeScroll.addView(homeContent)
 
@@ -619,7 +763,7 @@ class MainActivity : AppCompatActivity() {
         }
         navigateToPage = { page -> showPage(page) }
         homeTab = navItem("⌂", "Home") { showPage(0) }
-        imageTab = navItem("▧", "Image") { showPage(1) }
+        imageTab = navItem("▧", "My Files") { showPage(1) }
         videoTab = navItem("▶", "Video") { showPage(2) }
         settingsTab = navItem("⚙", "Settings") { showPage(3) }
         nav.addView(homeTab, LinearLayout.LayoutParams(0, dp(54), 1f))
