@@ -49,8 +49,17 @@ class MainActivity : AppCompatActivity() {
     private val muted = Color.rgb(100, 117, 111)
     private val mint = Color.rgb(235, 250, 245)
 
+    private var selectedVideoUri: Uri? = null
+    private lateinit var videoStatus: TextView
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) loadImage(uri)
+    }
+    private val pickVideo = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            selectedVideoUri = uri
+            val name = uri.lastPathSegment?.substringAfterLast('/') ?: "Video selected"
+            videoStatus.text = "Selected: $name\\nVideo watermark removal is not available in this build yet."
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -267,7 +276,127 @@ class MainActivity : AppCompatActivity() {
             setPadding(dp(3), dp(15), dp(3), dp(8))
         })
         scroll.addView(content)
+
+        val videoScroll = ScrollView(this).apply {
+            isFillViewport = true
+            isVerticalScrollBarEnabled = false
+            visibility = View.GONE
+        }
+        val videoContent = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 0, 0, dp(20))
+        }
+        val videoHeader = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(22), dp(20), dp(22))
+            background = GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(4, 78, 65), Color.rgb(0, 151, 112))).apply {
+                cornerRadius = dp(24).toFloat()
+            }
+        }
+        videoHeader.addView(TextView(this).apply {
+            text = "VIDEO STUDIO  •  PALIAAPK HUB"
+            textSize = 11f
+            letterSpacing = 0.08f
+            setTextColor(Color.rgb(194, 241, 223))
+        })
+        videoHeader.addView(TextView(this).apply {
+            text = "Video watermark\\nremoval"
+            textSize = 28f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(Color.WHITE)
+            setPadding(0, dp(18), 0, dp(7))
+        })
+        videoHeader.addView(TextView(this).apply {
+            text = "Choose a clip to prepare your video workspace."
+            textSize = 14f
+            setTextColor(Color.rgb(221, 244, 235))
+        })
+        videoContent.addView(videoHeader, margins(bottom = 16))
+        val videoCard = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding(dp(18), dp(26), dp(18), dp(22))
+            background = rounded(Color.WHITE, 22, Color.rgb(229, 238, 233), dp(1))
+        }
+        videoCard.addView(TextView(this).apply {
+            text = "▶"
+            textSize = 48f
+            gravity = Gravity.CENTER
+            setTextColor(emerald)
+        })
+        videoCard.addView(TextView(this).apply {
+            text = "Select a video"
+            textSize = 20f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+            gravity = Gravity.CENTER
+            setPadding(0, dp(8), 0, dp(6))
+        })
+        videoCard.addView(TextView(this).apply {
+            text = "MP4, MOV and other videos supported by your phone's gallery."
+            textSize = 13f
+            setTextColor(muted)
+            gravity = Gravity.CENTER
+        })
+        videoCard.addView(makeButton("▶   Choose video", true).apply {
+            setOnClickListener { pickVideo.launch("video/*") }
+        }, margins(top = 18))
+        videoStatus = TextView(this).apply {
+            text = "Video watermark removal engine is not included yet. This option currently lets you select a video only."
+            textSize = 13f
+            setTextColor(emerald)
+            setPadding(dp(13), dp(12), dp(13), dp(12))
+            background = rounded(Color.rgb(231, 247, 240), 14)
+        }
+        videoCard.addView(videoStatus, margins(top = 14))
+        videoContent.addView(videoCard)
+        videoContent.addView(TextView(this).apply {
+            text = "Video cleanup is a separate feature and needs a video-processing engine. This screen does not claim to remove or export a cleaned video yet."
+            textSize = 12f
+            setTextColor(muted)
+            setPadding(dp(4), dp(16), dp(4), dp(8))
+        })
+        videoScroll.addView(videoContent)
+
         root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        val nav = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER
+            setPadding(dp(8), dp(7), dp(8), dp(5))
+            background = rounded(Color.WHITE, 18, Color.rgb(229, 238, 233), dp(1))
+            elevation = dp(5).toFloat()
+        }
+        fun navItem(icon: String, label: String, active: Boolean, action: () -> Unit): TextView {
+            return TextView(this).apply {
+                text = "$icon\\n$label"
+                textSize = 11f
+                gravity = Gravity.CENTER
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+                setTextColor(if (active) emerald else muted)
+                setPadding(dp(8), dp(4), dp(8), dp(4))
+                background = if (active) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
+                setOnClickListener { action() }
+            }
+        }
+        lateinit var homeTab: TextView
+        lateinit var videoTab: TextView
+        fun showPage(video: Boolean) {
+            scroll.visibility = if (video) View.GONE else View.VISIBLE
+            videoScroll.visibility = if (video) View.VISIBLE else View.GONE
+            homeTab.setTextColor(if (video) muted else emerald)
+            videoTab.setTextColor(if (video) emerald else muted)
+            homeTab.background = if (video) rounded(Color.WHITE, 14) else rounded(Color.rgb(231, 247, 240), 14)
+            videoTab.background = if (video) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
+        }
+        homeTab = navItem("⌂", "Photo", true) { showPage(false) }
+        videoTab = navItem("▶", "Video", false) { showPage(true) }
+        nav.addView(homeTab, LinearLayout.LayoutParams(0, dp(54), 1f))
+        nav.addView(videoTab, LinearLayout.LayoutParams(0, dp(54), 1f))
+        root.addView(nav, LinearLayout.LayoutParams(-1, -2).apply {
+            topMargin = dp(8)
+        })
+        root.addView(videoScroll, 0, LinearLayout.LayoutParams(-1, 0, 1f))
         setContentView(root)
     }
 
