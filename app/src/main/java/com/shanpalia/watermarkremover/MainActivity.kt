@@ -43,7 +43,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        openCvReady = OpenCVLoader.initLocal()
+        openCvReady = try {
+            OpenCVLoader.initLocal()
+        } catch (e: Throwable) {
+            android.util.Log.e("MyWatermarkRemover", "OpenCV initialization failed", e)
+            false
+        }
         buildUi()
         status.text = if (openCvReady) "Choose an image, paint over the watermark, then tap Remove."
         else "Image engine failed to load. Please check build logs."
