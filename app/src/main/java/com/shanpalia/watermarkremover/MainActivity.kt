@@ -359,44 +359,242 @@ class MainActivity : AppCompatActivity() {
         })
         videoScroll.addView(videoContent)
 
-        root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        val homeScroll = ScrollView(this).apply {
+            isFillViewport = true
+            isVerticalScrollBarEnabled = false
+        }
+        val homeContent = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 0, 0, dp(16))
+        }
+        val homeHero = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(22), dp(20), dp(22))
+            background = GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(3, 73, 62), Color.rgb(0, 151, 112))).apply { cornerRadius = dp(25).toFloat() }
+        }
+        homeHero.addView(TextView(this).apply {
+            text = "MY WATERMARK REMOVER"
+            textSize = 11f
+            letterSpacing = 0.1f
+            setTextColor(Color.rgb(194, 241, 223))
+        })
+        homeHero.addView(TextView(this).apply {
+            text = "Your creative\\ncleanup studio."
+            textSize = 30f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(Color.WHITE)
+            setPadding(0, dp(14), 0, dp(7))
+        })
+        homeHero.addView(TextView(this).apply {
+            text = "By PaliaAPK HUB  ·  Developer By shanpalia"
+            textSize = 13f
+            setTextColor(Color.rgb(221, 244, 235))
+        })
+        homeContent.addView(homeHero, margins(bottom = 18))
+        homeContent.addView(TextView(this).apply {
+            text = "Choose your workspace"
+            textSize = 20f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        }, margins(bottom = 12))
+        val homeImageCard = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(16), dp(16), dp(16), dp(16))
+            background = rounded(Color.WHITE, 20, Color.rgb(225, 237, 231), dp(1))
+        }
+        homeImageCard.addView(TextView(this).apply {
+            text = "▧"
+            textSize = 32f
+            setTextColor(emerald)
+            gravity = Gravity.CENTER
+        }, LinearLayout.LayoutParams(dp(52), dp(58)))
+        val imageInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        imageInfo.addView(TextView(this).apply {
+            text = "Image cleanup"
+            textSize = 17f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        })
+        imageInfo.addView(TextView(this).apply {
+            text = "Brush an area and clean a photo offline"
+            textSize = 12f
+            setTextColor(muted)
+            setPadding(0, dp(4), 0, 0)
+        })
+        homeImageCard.addView(imageInfo, LinearLayout.LayoutParams(0, -2, 1f))
+        homeImageCard.addView(TextView(this).apply {
+            text = "›"
+            textSize = 28f
+            setTextColor(emerald)
+        })
+        homeImageCard.setOnClickListener { showPage(1) }
+        homeContent.addView(homeImageCard, margins(bottom = 10))
+        val homeVideoCard = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(16), dp(16), dp(16), dp(16))
+            background = rounded(Color.WHITE, 20, Color.rgb(225, 237, 231), dp(1))
+        }
+        homeVideoCard.addView(TextView(this).apply {
+            text = "▶"
+            textSize = 29f
+            setTextColor(emerald)
+            gravity = Gravity.CENTER
+        }, LinearLayout.LayoutParams(dp(52), dp(58)))
+        val videoInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        videoInfo.addView(TextView(this).apply {
+            text = "Video workspace"
+            textSize = 17f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        })
+        videoInfo.addView(TextView(this).apply {
+            text = "Choose a clip · processing engine not connected yet"
+            textSize = 12f
+            setTextColor(muted)
+            setPadding(0, dp(4), 0, 0)
+        })
+        homeVideoCard.addView(videoInfo, LinearLayout.LayoutParams(0, -2, 1f))
+        homeVideoCard.addView(TextView(this).apply {
+            text = "›"
+            textSize = 28f
+            setTextColor(emerald)
+        })
+        homeVideoCard.setOnClickListener { showPage(2) }
+        homeContent.addView(homeVideoCard, margins(bottom = 16))
+        val homeStatus = TextView(this).apply {
+            text = if (openCvReady) "● Offline image engine ready" else "● Offline image engine unavailable"
+            textSize = 13f
+            setTextColor(emerald)
+            setPadding(dp(14), dp(14), dp(14), dp(14))
+            background = rounded(Color.rgb(231, 247, 240), 15)
+        }
+        homeContent.addView(homeStatus)
+        homeContent.addView(TextView(this).apply {
+            text = "Online AI cleanup requires a configured processing service. This build does not send your photos to any server."
+            textSize = 12f
+            setTextColor(muted)
+            setPadding(dp(4), dp(15), dp(4), dp(8))
+        })
+        homeScroll.addView(homeContent)
+
+        val settingsScroll = ScrollView(this).apply {
+            isFillViewport = true
+            isVerticalScrollBarEnabled = false
+            visibility = View.GONE
+        }
+        val settingsContent = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 0, 0, dp(20))
+        }
+        val settingsHero = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(22), dp(20), dp(22))
+            background = GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                intArrayOf(Color.rgb(3, 73, 62), Color.rgb(0, 151, 112))).apply { cornerRadius = dp(24).toFloat() }
+        }
+        settingsHero.addView(TextView(this).apply {
+            text = "APP PREFERENCES"
+            textSize = 11f
+            letterSpacing = 0.1f
+            setTextColor(Color.rgb(194, 241, 223))
+        })
+        settingsHero.addView(TextView(this).apply {
+            text = "Settings"
+            textSize = 29f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(Color.WHITE)
+            setPadding(0, dp(12), 0, dp(4))
+        })
+        settingsHero.addView(TextView(this).apply {
+            text = "My Watermark Remover by PaliaAPK HUB"
+            textSize = 13f
+            setTextColor(Color.rgb(221, 244, 235))
+        })
+        settingsContent.addView(settingsHero, margins(bottom = 16))
+        fun settingCard(title: String, subtitle: String): LinearLayout {
+            val card = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(dp(16), dp(16), dp(16), dp(16))
+                background = rounded(Color.WHITE, 18, Color.rgb(225, 237, 231), dp(1))
+            }
+            card.addView(TextView(this).apply {
+                text = title
+                textSize = 16f
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+                setTextColor(ink)
+            })
+            card.addView(TextView(this).apply {
+                text = subtitle
+                textSize = 12f
+                setTextColor(muted)
+                setPadding(0, dp(5), 0, 0)
+            })
+            return card
+        }
+        settingsContent.addView(settingCard("Offline mode", "Image cleanup runs on your phone using OpenCV. No upload is needed."), margins(bottom = 10))
+        settingsContent.addView(settingCard("Online mode", "Online AI removal is not configured yet. A secure backend/API is required before this can work."), margins(bottom = 10))
+        settingsContent.addView(settingCard("Video processing", "Video selection is available; watermark removal and export need a video-processing engine."), margins(bottom = 10))
+        settingsContent.addView(settingCard("App information", "My Watermark Remover\\nBy PaliaAPK HUB\\nDeveloper By shanpalia\\nVersion 1.0"), margins(bottom = 10))
+        settingsContent.addView(makeButton("Open Photo workspace", true).apply {
+            setOnClickListener { showPage(1) }
+        }, margins(top = 4, bottom = 8))
+        settingsContent.addView(makeButton("Open Video workspace", false).apply {
+            setOnClickListener { showPage(2) }
+        })
+        settingsScroll.addView(settingsContent)
+
+        root.addView(homeScroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = dp(0) })
+        root.addView(videoScroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        root.addView(settingsScroll, LinearLayout.LayoutParams(-1, 0, 1f))
         val nav = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER
-            setPadding(dp(8), dp(7), dp(8), dp(5))
-            background = rounded(Color.WHITE, 18, Color.rgb(229, 238, 233), dp(1))
+            setPadding(dp(5), dp(6), dp(5), dp(5))
+            background = rounded(Color.WHITE, 20, Color.rgb(229, 238, 233), dp(1))
             elevation = dp(5).toFloat()
         }
-        fun navItem(icon: String, label: String, active: Boolean, action: () -> Unit): TextView {
+        lateinit var homeTab: TextView
+        lateinit var imageTab: TextView
+        lateinit var videoTab: TextView
+        lateinit var settingsTab: TextView
+        fun navItem(icon: String, label: String, action: () -> Unit): TextView {
             return TextView(this).apply {
                 text = "$icon\\n$label"
-                textSize = 11f
+                textSize = 10f
                 gravity = Gravity.CENTER
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
-                setTextColor(if (active) emerald else muted)
-                setPadding(dp(8), dp(4), dp(8), dp(4))
-                background = if (active) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
+                setTextColor(muted)
+                setPadding(dp(3), dp(5), dp(3), dp(5))
+                background = rounded(Color.WHITE, 14)
                 setOnClickListener { action() }
             }
         }
-        lateinit var homeTab: TextView
-        lateinit var videoTab: TextView
-        fun showPage(video: Boolean) {
-            scroll.visibility = if (video) View.GONE else View.VISIBLE
-            videoScroll.visibility = if (video) View.VISIBLE else View.GONE
-            homeTab.setTextColor(if (video) muted else emerald)
-            videoTab.setTextColor(if (video) emerald else muted)
-            homeTab.background = if (video) rounded(Color.WHITE, 14) else rounded(Color.rgb(231, 247, 240), 14)
-            videoTab.background = if (video) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
+        fun showPage(page: Int) {
+            homeScroll.visibility = if (page == 0) View.VISIBLE else View.GONE
+            scroll.visibility = if (page == 1) View.VISIBLE else View.GONE
+            videoScroll.visibility = if (page == 2) View.VISIBLE else View.GONE
+            settingsScroll.visibility = if (page == 3) View.VISIBLE else View.GONE
+            val tabs = listOf(homeTab, imageTab, videoTab, settingsTab)
+            tabs.forEachIndexed { index, tab ->
+                val active = index == page
+                tab.setTextColor(if (active) emerald else muted)
+                tab.background = if (active) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
+            }
         }
-        homeTab = navItem("⌂", "Photo", true) { showPage(false) }
-        videoTab = navItem("▶", "Video", false) { showPage(true) }
+        homeTab = navItem("⌂", "Home") { showPage(0) }
+        imageTab = navItem("▧", "Image") { showPage(1) }
+        videoTab = navItem("▶", "Video") { showPage(2) }
+        settingsTab = navItem("⚙", "Settings") { showPage(3) }
         nav.addView(homeTab, LinearLayout.LayoutParams(0, dp(54), 1f))
+        nav.addView(imageTab, LinearLayout.LayoutParams(0, dp(54), 1f))
         nav.addView(videoTab, LinearLayout.LayoutParams(0, dp(54), 1f))
-        root.addView(nav, LinearLayout.LayoutParams(-1, -2).apply {
-            topMargin = dp(8)
-        })
-        root.addView(videoScroll, 0, LinearLayout.LayoutParams(-1, 0, 1f))
+        nav.addView(settingsTab, LinearLayout.LayoutParams(0, dp(54), 1f))
+        root.addView(nav, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })
+        showPage(0)
         setContentView(root)
     }
 
