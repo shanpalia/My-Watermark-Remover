@@ -92,8 +92,8 @@ class MainActivity : AppCompatActivity() {
 
         val header = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(20), dp(19), dp(20), dp(20))
-            background = rounded(Color.rgb(7, 105, 79), 24)
+            setPadding(dp(18), dp(15), dp(18), dp(16))
+            background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(Color.rgb(4, 78, 65), Color.rgb(0, 151, 112))).apply { cornerRadius = dp(24).toFloat() }
         }
         val brandLine = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -124,32 +124,32 @@ class MainActivity : AppCompatActivity() {
         })
         header.addView(brandLine)
         header.addView(TextView(this).apply {
-            text = "Clean up your photos."
-            textSize = 27f
+            text = "Make watermarks\ndisappear."
+            textSize = 25f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
-            setPadding(0, dp(19), 0, dp(5))
+            setPadding(0, dp(13), 0, dp(5))
         })
         header.addView(TextView(this).apply {
-            text = "Brush over a watermark and clean up your image in a few steps."
+            text = "Mark the area. Clean it up. Save your photo."
             textSize = 14f
             setTextColor(Color.rgb(221, 244, 235))
             setLineSpacing(dp(2).toFloat(), 1f)
         })
-        content.addView(header, margins(bottom = 18))
+        content.addView(header, margins(bottom = 14))
 
         val titleLine = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
         }
         titleLine.addView(TextView(this).apply {
-            text = "Workspace"
+            text = "Your canvas"
             textSize = 19f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(ink)
         }, LinearLayout.LayoutParams(0, -2, 1f))
         titleLine.addView(TextView(this).apply {
-            text = "STEP 1 OF 3"
+            text = "01  SELECT PHOTO"
             textSize = 10f
             letterSpacing = 0.08f
             setTextColor(emerald)
@@ -186,14 +186,14 @@ class MainActivity : AppCompatActivity() {
                 setTextColor(emerald)
             })
             addView(TextView(this@MainActivity).apply {
-                text = "Your photo appears here"
+                text = "Ready for your photo"
                 textSize = 14f
                 gravity = Gravity.CENTER
                 setTextColor(ink)
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
             })
             addView(TextView(this@MainActivity).apply {
-                text = "Choose an image to get started"
+                text = "Tap below to open your gallery"
                 textSize = 12f
                 gravity = Gravity.CENTER
                 setTextColor(muted)
@@ -201,12 +201,29 @@ class MainActivity : AppCompatActivity() {
             })
         }
         frame.addView(emptyState, FrameLayout.LayoutParams(-1, -1))
-        workCard.addView(frame, LinearLayout.LayoutParams(-1, dp(250)))
+        workCard.addView(frame, LinearLayout.LayoutParams(-1, dp(205)))
         chooseButton = makeButton("＋   Choose image", true).apply {
             setOnClickListener { pickImage.launch("image/*") }
         }
         workCard.addView(chooseButton, margins(top = 12))
         content.addView(workCard)
+
+        val buttons = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        buttons.addView(makeButton("Reset", false).apply {
+            setOnClickListener { maskView.clearMask(); status.text = "Brush marks cleared." }
+        }, LinearLayout.LayoutParams(0, dp(50), 1f).apply { marginEnd = dp(8) })
+        removeButton = makeButton("Remove watermark", true).apply {
+            isEnabled = false
+            setOnClickListener { removeWatermark() }
+        }
+        buttons.addView(removeButton, LinearLayout.LayoutParams(0, dp(50), 1.35f))
+        content.addView(buttons, margins(top = 12))
+        content.addView(makeButton("↓   Save cleaned photo", false).apply {
+            setOnClickListener { saveResult() }
+        }, margins(top = 9))
 
         content.addView(TextView(this).apply {
             text = "HOW TO USE"
@@ -235,23 +252,6 @@ class MainActivity : AppCompatActivity() {
         })
         content.addView(steps)
 
-        val buttons = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-        }
-        buttons.addView(makeButton("Reset", false).apply {
-            setOnClickListener { maskView.clearMask(); status.text = "Brush marks cleared." }
-        }, LinearLayout.LayoutParams(0, dp(50), 1f).apply { marginEnd = dp(8) })
-        removeButton = makeButton("Remove watermark", true).apply {
-            isEnabled = false
-            setOnClickListener { removeWatermark() }
-        }
-        buttons.addView(removeButton, LinearLayout.LayoutParams(0, dp(50), 1.35f))
-        content.addView(buttons, margins(top = 12))
-        content.addView(makeButton("↓   Save cleaned photo", false).apply {
-            setOnClickListener { saveResult() }
-        }, margins(top = 9))
-
         status = TextView(this).apply {
             textSize = 13f
             setTextColor(emerald)
@@ -260,7 +260,7 @@ class MainActivity : AppCompatActivity() {
         }
         content.addView(status, margins(top = 13))
         content.addView(TextView(this).apply {
-            text = "ABOUT THIS TOOL\nThis version uses offline OpenCV inpainting, not generative AI. Results depend on the marked area. Edit only images you own or have permission to modify.\n\nDeveloper By shanpalia"
+            text = "MADE BY PALIAAPK HUB  ·  DEVELOPER SHANPALIA\nOffline image cleanup powered by OpenCV. Results depend on the marked area; edit only images you have permission to modify."
             textSize = 11f
             setLineSpacing(dp(3).toFloat(), 1f)
             setTextColor(muted)
@@ -315,7 +315,7 @@ class MainActivity : AppCompatActivity() {
             maskView.setSourceSize(w, h)
             maskView.isEnabled = true
             removeButton.isEnabled = true
-            chooseButton.text = "✓   Change image"
+            chooseButton.text = "↻   Change photo"
             status.text = "Photo loaded (${w} × ${h}). Brush over the watermark."
         } catch (e: Exception) {
             status.text = "Couldn't open image: ${e.message ?: "unknown error"}"
