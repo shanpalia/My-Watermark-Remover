@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
     private val mint = Color.rgb(235, 250, 245)
 
     private var selectedVideoUri: Uri? = null
+    // Shared page navigation callback, declared at class scope so all UI builders can use it.
+    private var navigateToPage: ((Int) -> Unit)? = null
     private lateinit var videoStatus: TextView
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) loadImage(uri)
