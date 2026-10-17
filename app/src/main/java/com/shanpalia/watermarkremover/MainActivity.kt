@@ -398,6 +398,7 @@ class MainActivity : AppCompatActivity() {
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(ink)
         }, margins(bottom = 12))
+        var navigateToPage: ((Int) -> Unit)? = null
         val homeImageCard = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -429,7 +430,7 @@ class MainActivity : AppCompatActivity() {
             textSize = 28f
             setTextColor(emerald)
         })
-        homeImageCard.setOnClickListener { showPage(1) }
+        homeImageCard.setOnClickListener { navigateToPage?.invoke(1) }
         homeContent.addView(homeImageCard, margins(bottom = 10))
         val homeVideoCard = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -462,7 +463,7 @@ class MainActivity : AppCompatActivity() {
             textSize = 28f
             setTextColor(emerald)
         })
-        homeVideoCard.setOnClickListener { showPage(2) }
+        homeVideoCard.setOnClickListener { navigateToPage?.invoke(2) }
         homeContent.addView(homeVideoCard, margins(bottom = 16))
         val homeStatus = TextView(this).apply {
             text = if (openCvReady) "● Offline image engine ready" else "● Offline image engine unavailable"
@@ -539,10 +540,10 @@ class MainActivity : AppCompatActivity() {
         settingsContent.addView(settingCard("Video processing", "Video selection is available; watermark removal and export need a video-processing engine."), margins(bottom = 10))
         settingsContent.addView(settingCard("App information", "My Watermark Remover\\nBy PaliaAPK HUB\\nDeveloper By shanpalia\\nVersion 1.0"), margins(bottom = 10))
         settingsContent.addView(makeButton("Open Photo workspace", true).apply {
-            setOnClickListener { showPage(1) }
+            setOnClickListener { navigateToPage?.invoke(1) }
         }, margins(top = 4, bottom = 8))
         settingsContent.addView(makeButton("Open Video workspace", false).apply {
-            setOnClickListener { showPage(2) }
+            setOnClickListener { navigateToPage?.invoke(2) }
         })
         settingsScroll.addView(settingsContent)
 
@@ -585,6 +586,7 @@ class MainActivity : AppCompatActivity() {
                 tab.background = if (active) rounded(Color.rgb(231, 247, 240), 14) else rounded(Color.WHITE, 14)
             }
         }
+        navigateToPage = { page -> showPage(page) }
         homeTab = navItem("⌂", "Home") { showPage(0) }
         imageTab = navItem("▧", "Image") { showPage(1) }
         videoTab = navItem("▶", "Video") { showPage(2) }
