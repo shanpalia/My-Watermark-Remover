@@ -7,13 +7,16 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -21,6 +24,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.Mat
@@ -35,7 +41,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var maskView: MaskDrawingView
     private lateinit var status: TextView
     private lateinit var removeButton: Button
+    private lateinit var chooseButton: Button
     private var openCvReady = false
+    private val emerald = Color.rgb(0, 137, 100)
+    private val ink = Color.rgb(24, 43, 39)
+    private val muted = Color.rgb(100, 117, 111)
+    private val mint = Color.rgb(235, 250, 245)
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) loadImage(uri)
@@ -43,6 +54,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         openCvReady = try {
             OpenCVLoader.initLocal()
         } catch (e: Throwable) {
@@ -50,83 +65,239 @@ class MainActivity : AppCompatActivity() {
             false
         }
         buildUi()
-        status.text = if (openCvReady) "Choose an image, paint over the watermark, then tap Remove."
-        else "Image engine failed to load. Please check build logs."
+        status.text = if (openCvReady) "Ready when you are — choose a photo to begin."
+        else "Image engine couldn't start. Try reinstalling the latest build."
     }
 
     private fun buildUi() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(18), dp(14), dp(18), dp(16))
-            setBackgroundColor(Color.rgb(255, 255, 255))
+            setBackgroundColor(Color.rgb(247, 250, 248))
         }
-        val scroll = ScrollView(this)
-        val content = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        content.addView(TextView(this).apply {
-            text = "My Watermark Remover"
-            textSize = 25f
-            setTextColor(Color.rgb(0, 145, 105))
-            setPadding(0, 0, 0, dp(8))
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(dp(18), bars.top + dp(10), dp(18), bars.bottom + dp(10))
+            insets
+        }
+        val scroll = ScrollView(this).apply {
+            isFillViewport = true
+            clipToPadding = false
+            isVerticalScrollBarEnabled = false
+        }
+        val content = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(0, 0, 0, dp(10))
+        }
+
+        val header = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(20), dp(19), dp(20), dp(20))
+            background = rounded(Color.rgb(7, 105, 79), 24)
+        }
+        val brandLine = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        brandLine.addView(TextView(this).apply {
+            text = "✦"
+            textSize = 23f
+            gravity = Gravity.CENTER
+            setTextColor(Color.WHITE)
+            background = rounded(Color.rgb(31, 143, 111), 14)
+        }, LinearLayout.LayoutParams(dp(44), dp(44)))
+        brandLine.addView(TextView(this).apply {
+            text = "PALIAAPK HUB"
+            textSize = 12f
+            letterSpacing = 0.12f
+            setTextColor(Color.rgb(194, 241, 223))
+            setPadding(dp(11), 0, 0, 0)
+            gravity = Gravity.CENTER_VERTICAL
+        }, LinearLayout.LayoutParams(0, dp(44), 1f))
+        brandLine.addView(TextView(this).apply {
+            text = "● OFFLINE"
+            textSize = 10f
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            setPadding(dp(10), dp(7), dp(10), dp(7))
+            background = rounded(Color.rgb(28, 126, 97), 30)
+        })
+        header.addView(brandLine)
+        header.addView(TextView(this).apply {
+            text = "Clean up your photos."
+            textSize = 27f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(Color.WHITE)
+            setPadding(0, dp(19), 0, dp(5))
         })
-        content.addView(TextView(this).apply {
-            text = "by PaliaAPK HUB  |  Developer By shanpalia\nOffline Image Cleanup"
+        header.addView(TextView(this).apply {
+            text = "Brush over a watermark and clean up your image in a few steps."
             textSize = 14f
-            setTextColor(Color.DKGRAY)
-            setPadding(0, 0, 0, dp(12))
+            setTextColor(Color.rgb(221, 244, 235))
+            setLineSpacing(dp(2).toFloat(), 1f)
         })
-        content.addView(Button(this).apply {
-            text = "Choose Image"
-            setOnClickListener { pickImage.launch("image/*") }
+        content.addView(header, margins(bottom = 18))
+
+        val titleLine = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        titleLine.addView(TextView(this).apply {
+            text = "Workspace"
+            textSize = 19f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        }, LinearLayout.LayoutParams(0, -2, 1f))
+        titleLine.addView(TextView(this).apply {
+            text = "STEP 1 OF 3"
+            textSize = 10f
+            letterSpacing = 0.08f
+            setTextColor(emerald)
+            setPadding(dp(10), dp(7), dp(10), dp(7))
+            background = rounded(Color.rgb(220, 245, 236), 30)
         })
-        val frame = android.widget.FrameLayout(this).apply { setBackgroundColor(Color.WHITE) }
+        content.addView(titleLine, margins(bottom = 10))
+
+        val workCard = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(12), dp(12), dp(12), dp(14))
+            background = rounded(Color.WHITE, 22, Color.rgb(229, 238, 233), dp(1))
+            elevation = dp(2).toFloat()
+        }
+        val frame = FrameLayout(this).apply {
+            background = rounded(mint, 16)
+            clipToOutline = true
+        }
         preview = ImageView(this).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
-            adjustViewBounds = true
             contentDescription = "Selected image preview"
+            setPadding(dp(8), dp(8), dp(8), dp(8))
         }
         maskView = MaskDrawingView(this).apply { isEnabled = false }
-        frame.addView(preview, android.widget.FrameLayout.LayoutParams(-1, dp(360)))
-        frame.addView(maskView, android.widget.FrameLayout.LayoutParams(-1, dp(360)))
-        content.addView(frame)
+        frame.addView(preview, FrameLayout.LayoutParams(-1, -1))
+        frame.addView(maskView, FrameLayout.LayoutParams(-1, -1))
+        val placeholder = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            addView(TextView(this@MainActivity).apply {
+                text = "▧"
+                textSize = 42f
+                gravity = Gravity.CENTER
+                setTextColor(emerald)
+            })
+            addView(TextView(this@MainActivity).apply {
+                text = "Your photo appears here"
+                textSize = 14f
+                gravity = Gravity.CENTER
+                setTextColor(ink)
+                typeface = android.graphics.Typeface.DEFAULT_BOLD
+            })
+            addView(TextView(this@MainActivity).apply {
+                text = "Choose an image to get started"
+                textSize = 12f
+                gravity = Gravity.CENTER
+                setTextColor(muted)
+                setPadding(0, dp(5), 0, 0)
+            })
+        }
+        frame.addView(placeholder, FrameLayout.LayoutParams(-1, -1))
+        workCard.addView(frame, LinearLayout.LayoutParams(-1, dp(250)))
+        chooseButton = makeButton("＋   Choose image", true).apply {
+            setOnClickListener { pickImage.launch("image/*") }
+        }
+        workCard.addView(chooseButton, margins(top = 12))
+        content.addView(workCard)
+
         content.addView(TextView(this).apply {
-            text = "Draw over the watermark with your finger. Use Reset Mask if needed."
-            textSize = 13f
-            setTextColor(Color.DKGRAY)
-            setPadding(0, dp(10), 0, dp(4))
+            text = "HOW TO USE"
+            textSize = 11f
+            letterSpacing = 0.1f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(muted)
+            setPadding(dp(2), dp(20), 0, dp(9))
         })
-        val buttons = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        buttons.addView(Button(this).apply {
-            text = "Reset Mask"
-            setOnClickListener { maskView.clearMask() }
-        }, LinearLayout.LayoutParams(0, dp(52), 1f))
-        removeButton = Button(this).apply {
-            text = "Remove"
+        val steps = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(14), dp(13), dp(14), dp(13))
+            background = rounded(Color.WHITE, 18, Color.rgb(230, 239, 234), dp(1))
+        }
+        steps.addView(TextView(this).apply {
+            text = "① Select photo     ② Brush area     ③ Save result"
+            textSize = 13f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+            setTextColor(ink)
+        })
+        steps.addView(TextView(this).apply {
+            text = "Use your finger to mark only the area you want to clean."
+            textSize = 12f
+            setTextColor(muted)
+            setPadding(0, dp(5), 0, 0)
+        })
+        content.addView(steps)
+
+        val buttons = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+        }
+        buttons.addView(makeButton("Reset", false).apply {
+            setOnClickListener { maskView.clearMask(); status.text = "Brush marks cleared." }
+        }, LinearLayout.LayoutParams(0, dp(50), 1f).apply { marginEnd = dp(8) })
+        removeButton = makeButton("Remove watermark", true).apply {
             isEnabled = false
             setOnClickListener { removeWatermark() }
         }
-        buttons.addView(removeButton, LinearLayout.LayoutParams(0, dp(52), 1f))
-        content.addView(buttons)
-        content.addView(Button(this).apply {
-            text = "Save Result"
+        buttons.addView(removeButton, LinearLayout.LayoutParams(0, dp(50), 1.35f))
+        content.addView(buttons, margins(top = 12))
+        content.addView(makeButton("↓   Save cleaned photo", false).apply {
             setOnClickListener { saveResult() }
-        })
+        }, margins(top = 9))
+
         status = TextView(this).apply {
             textSize = 13f
-            setTextColor(Color.rgb(45, 65, 65))
-            setPadding(0, dp(10), 0, 0)
+            setTextColor(emerald)
+            setPadding(dp(13), dp(12), dp(13), dp(12))
+            background = rounded(Color.rgb(231, 247, 240), 14)
         }
-        content.addView(status)
+        content.addView(status, margins(top = 13))
         content.addView(TextView(this).apply {
-            text = "Note: results depend on the selected area. This starter uses classical inpainting, not neural AI. Only edit content you own or have permission to edit."
-            textSize = 12f
-            setTextColor(Color.GRAY)
-            setPadding(0, dp(12), 0, dp(10))
+            text = "ABOUT THIS TOOL\nThis version uses offline OpenCV inpainting, not generative AI. Results depend on the marked area. Edit only images you own or have permission to modify.\n\nDeveloper By shanpalia"
+            textSize = 11f
+            setLineSpacing(dp(3).toFloat(), 1f)
+            setTextColor(muted)
+            setPadding(dp(3), dp(15), dp(3), dp(8))
         })
         scroll.addView(content)
         root.addView(scroll, LinearLayout.LayoutParams(-1, 0, 1f))
         setContentView(root)
     }
+
+    private fun makeButton(label: String, primary: Boolean): Button = Button(this).apply {
+        text = label
+        textSize = 14f
+        isAllCaps = false
+        typeface = android.graphics.Typeface.DEFAULT_BOLD
+        gravity = Gravity.CENTER
+        minHeight = dp(48)
+        minimumHeight = dp(48)
+        setPadding(dp(12), dp(5), dp(12), dp(5))
+        background = rounded(if (primary) emerald else Color.WHITE, 15,
+            if (primary) emerald else Color.rgb(219, 231, 225), dp(1))
+        setTextColor(if (primary) Color.WHITE else emerald)
+        stateListAnimator = null
+        if (Build.VERSION.SDK_INT >= 21) elevation = if (primary) dp(2).toFloat() else 0f
+    }
+
+    private fun rounded(color: Int, radius: Int, strokeColor: Int? = null, strokeWidth: Int = 0) =
+        GradientDrawable().apply {
+            setColor(color)
+            cornerRadius = dp(radius).toFloat()
+            if (strokeColor != null && strokeWidth > 0) setStroke(strokeWidth, strokeColor)
+        }
+
+    private fun margins(top: Int = 0, bottom: Int = 0) =
+        LinearLayout.LayoutParams(-1, -2).apply {
+            if (top > 0) topMargin = dp(top)
+            if (bottom > 0) bottomMargin = dp(bottom)
+        }
 
     private fun loadImage(uri: Uri) {
         try {
@@ -142,15 +313,18 @@ class MainActivity : AppCompatActivity() {
             maskView.setSourceSize(w, h)
             maskView.isEnabled = true
             removeButton.isEnabled = true
-            status.text = "Image ready ($w × $h). Paint the watermark area."
+            chooseButton.text = "✓   Change image"
+            status.text = "Photo loaded (${w} × ${h}). Brush over the watermark."
         } catch (e: Exception) {
-            status.text = "Could not open image: ${e.message ?: "unknown error"}"
+            status.text = "Couldn't open image: ${e.message ?: "unknown error"}"
         }
     }
 
     private fun removeWatermark() {
         val src = sourceBitmap ?: return toast("Choose an image first.")
         if (!openCvReady) return toast("Image engine is not available.")
+        removeButton.isEnabled = false
+        status.text = "Cleaning the selected area…"
         try {
             val source = Mat()
             Utils.bitmapToMat(src.copy(Bitmap.Config.ARGB_8888, true), source)
@@ -169,15 +343,22 @@ class MainActivity : AppCompatActivity() {
             Utils.matToBitmap(rgba, bitmap)
             resultBitmap = bitmap
             preview.setImageBitmap(bitmap)
-            status.text = "Finished. Check edges carefully, then Save Result."
-            source.release(); bgr.release(); maskMat.release(); output.release(); rgba.release()
+            status.text = "Cleanup finished. Review the photo, then save it."
+            source.release()
+            bgr.release()
+            maskMat.release()
+            output.release()
+            rgba.release()
         } catch (e: Exception) {
-            status.text = "Removal failed: ${e.message ?: "unknown error"}"
+            android.util.Log.e("MyWatermarkRemover", "Removal failed", e)
+            status.text = "Cleanup failed: ${e.message ?: "unknown error"}"
+        } finally {
+            removeButton.isEnabled = sourceBitmap != null
         }
     }
 
     private fun saveResult() {
-        val bitmap = resultBitmap ?: return toast("Remove a watermark first.")
+        val bitmap = resultBitmap ?: return toast("Clean a photo first.")
         try {
             val values = ContentValues().apply {
                 put(MediaStore.Images.Media.DISPLAY_NAME, "My_Watermark_Removed_${System.currentTimeMillis()}.png")
@@ -192,7 +373,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             status.text = "Saved to Pictures/MyWatermarkRemover."
-            toast("Image saved.")
+            toast("Photo saved to Pictures.")
         } catch (e: Exception) {
             status.text = "Save failed: ${e.message ?: "unknown error"}"
         }
@@ -204,16 +385,14 @@ class MainActivity : AppCompatActivity() {
     private inner class MaskDrawingView(context: android.content.Context) : View(context) {
         private val maskPath = Path()
         private val overlayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.argb(145, 0, 190, 170)
+            color = Color.argb(175, 0, 150, 110)
             style = Paint.Style.STROKE
             strokeWidth = dp(22).toFloat()
             strokeCap = Paint.Cap.ROUND
             strokeJoin = Paint.Join.ROUND
         }
-        private var imageW = 1
-        private var imageH = 1
 
-        fun setSourceSize(w: Int, h: Int) { imageW = w; imageH = h; clearMask() }
+        fun setSourceSize(w: Int, h: Int) { clearMask() }
         fun clearMask() { maskPath.reset(); invalidate() }
 
         override fun onDraw(canvas: Canvas) {
@@ -236,8 +415,9 @@ class MainActivity : AppCompatActivity() {
             val canvas = Canvas(bm)
             val sx = width / this.width.coerceAtLeast(1).toFloat()
             val sy = height / this.height.coerceAtLeast(1).toFloat()
-            val matrix = android.graphics.Matrix().apply { setScale(sx, sy) }
-            val mappedPath = Path(maskPath).apply { transform(matrix) }
+            val mappedPath = Path(maskPath).apply {
+                transform(android.graphics.Matrix().apply { setScale(sx, sy) })
+            }
             val p = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.WHITE
                 style = Paint.Style.STROKE
