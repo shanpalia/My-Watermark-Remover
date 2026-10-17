@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var status: TextView
     private lateinit var removeButton: Button
     private lateinit var chooseButton: Button
+    private lateinit var emptyState: View
     private var openCvReady = false
     private val emerald = Color.rgb(0, 137, 100)
     private val ink = Color.rgb(24, 43, 39)
@@ -175,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         maskView = MaskDrawingView(this).apply { isEnabled = false }
         frame.addView(preview, FrameLayout.LayoutParams(-1, -1))
         frame.addView(maskView, FrameLayout.LayoutParams(-1, -1))
-        val placeholder = LinearLayout(this).apply {
+        emptyState = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
             addView(TextView(this@MainActivity).apply {
@@ -199,7 +200,7 @@ class MainActivity : AppCompatActivity() {
                 setPadding(0, dp(5), 0, 0)
             })
         }
-        frame.addView(placeholder, FrameLayout.LayoutParams(-1, -1))
+        frame.addView(emptyState, FrameLayout.LayoutParams(-1, -1))
         workCard.addView(frame, LinearLayout.LayoutParams(-1, dp(250)))
         chooseButton = makeButton("＋   Choose image", true).apply {
             setOnClickListener { pickImage.launch("image/*") }
@@ -310,6 +311,7 @@ class MainActivity : AppCompatActivity() {
             sourceBitmap = if (scale < 1.0) Bitmap.createScaledBitmap(original, w, h, true) else original
             resultBitmap = null
             preview.setImageBitmap(sourceBitmap)
+            emptyState.visibility = View.GONE
             maskView.setSourceSize(w, h)
             maskView.isEnabled = true
             removeButton.isEnabled = true
