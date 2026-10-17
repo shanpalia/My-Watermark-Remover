@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         if (uri != null) {
             selectedVideoUri = uri
             val name = uri.lastPathSegment?.substringAfterLast('/') ?: "Video selected"
-            videoStatus.text = "Selected: $name\\nVideo watermark removal is not available in this build yet."
+            videoStatus.text = "Selected: $name\nVideo watermark removal is not available in this build yet."
         }
     }
 
@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity() {
             setTextColor(Color.rgb(194, 241, 223))
         })
         videoHeader.addView(TextView(this).apply {
-            text = "Video watermark\\nremoval"
+            text = "Video watermark\nremoval"
             textSize = 28f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
@@ -374,13 +374,13 @@ class MainActivity : AppCompatActivity() {
                 intArrayOf(Color.rgb(3, 73, 62), Color.rgb(0, 151, 112))).apply { cornerRadius = dp(25).toFloat() }
         }
         homeHero.addView(TextView(this).apply {
-            text = "MY WATERMARK REMOVER"
+            text = "✦  MY WATERMARK REMOVER"
             textSize = 11f
             letterSpacing = 0.1f
             setTextColor(Color.rgb(194, 241, 223))
         })
         homeHero.addView(TextView(this).apply {
-            text = "Your creative\\ncleanup studio."
+            text = "Erase the extra.\nKeep the moment."
             textSize = 30f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(Color.WHITE)
@@ -393,7 +393,7 @@ class MainActivity : AppCompatActivity() {
         })
         homeContent.addView(homeHero, margins(bottom = 18))
         homeContent.addView(TextView(this).apply {
-            text = "Choose your workspace"
+            text = "What would you like to clean?"
             textSize = 20f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(ink)
@@ -407,19 +407,21 @@ class MainActivity : AppCompatActivity() {
         }
         homeImageCard.addView(TextView(this).apply {
             text = "▧"
-            textSize = 32f
+            textSize = 30f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(emerald)
             gravity = Gravity.CENTER
-        }, LinearLayout.LayoutParams(dp(52), dp(58)))
+            background = rounded(Color.rgb(225, 248, 239), 16)
+        }, LinearLayout.LayoutParams(dp(58), dp(60)))
         val imageInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         imageInfo.addView(TextView(this).apply {
-            text = "Image cleanup"
+            text = "Photo magic"
             textSize = 17f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(ink)
         })
         imageInfo.addView(TextView(this).apply {
-            text = "Brush an area and clean a photo offline"
+            text = "Remove unwanted marks from your picture"
             textSize = 12f
             setTextColor(muted)
             setPadding(0, dp(4), 0, 0)
@@ -440,19 +442,21 @@ class MainActivity : AppCompatActivity() {
         }
         homeVideoCard.addView(TextView(this).apply {
             text = "▶"
-            textSize = 29f
+            textSize = 25f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(emerald)
             gravity = Gravity.CENTER
-        }, LinearLayout.LayoutParams(dp(52), dp(58)))
+            background = rounded(Color.rgb(225, 248, 239), 16)
+        }, LinearLayout.LayoutParams(dp(58), dp(60)))
         val videoInfo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         videoInfo.addView(TextView(this).apply {
-            text = "Video workspace"
+            text = "Video studio"
             textSize = 17f
             typeface = android.graphics.Typeface.DEFAULT_BOLD
             setTextColor(ink)
         })
         videoInfo.addView(TextView(this).apply {
-            text = "Choose a clip · processing engine not connected yet"
+            text = "Video tools · processing engine coming next"
             textSize = 12f
             setTextColor(muted)
             setPadding(0, dp(4), 0, 0)
@@ -538,7 +542,7 @@ class MainActivity : AppCompatActivity() {
         settingsContent.addView(settingCard("Offline mode", "Image cleanup runs on your phone using OpenCV. No upload is needed."), margins(bottom = 10))
         settingsContent.addView(settingCard("Online mode", "Online AI removal is not configured yet. A secure backend/API is required before this can work."), margins(bottom = 10))
         settingsContent.addView(settingCard("Video processing", "Video selection is available; watermark removal and export need a video-processing engine."), margins(bottom = 10))
-        settingsContent.addView(settingCard("App information", "My Watermark Remover\\nBy PaliaAPK HUB\\nDeveloper By shanpalia\\nVersion 1.0"), margins(bottom = 10))
+        settingsContent.addView(settingCard("App information", "My Watermark Remover\nBy PaliaAPK HUB\nDeveloper By shanpalia\nVersion 1.0"), margins(bottom = 10))
         settingsContent.addView(makeButton("Open Photo workspace", true).apply {
             setOnClickListener { navigateToPage?.invoke(1) }
         }, margins(top = 4, bottom = 8))
@@ -564,7 +568,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var settingsTab: TextView
         fun navItem(icon: String, label: String, action: () -> Unit): TextView {
             return TextView(this).apply {
-                text = "$icon\\n$label"
+                text = "$icon\n$label"
                 textSize = 10f
                 gravity = Gravity.CENTER
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
