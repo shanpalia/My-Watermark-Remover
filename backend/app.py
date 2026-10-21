@@ -193,8 +193,10 @@ async def inpaint_image(
             im.verify()
     except Exception as exc:
         raise HTTPException(status_code=502, detail="AI returned an invalid image file.") from exc
+    output_path = _write_temp(result, ".png")
+    background_tasks.add_task(cleanup, output_path)
     return FileResponse(
-        _write_temp(result, ".png"),
+        output_path,
         media_type="image/png",
         filename="watermark-removed.png",
         background=background_tasks,
