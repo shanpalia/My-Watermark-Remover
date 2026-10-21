@@ -37,29 +37,16 @@ footer{border-top-color:#e1eee7;color:#71877d}.footbrand b{color:#244b3b}.footbr
 @media(max-width:480px){.topbar{background:#ffffffed}}
 
 
-/* Video watermark remover workspace */
-.video-panel{margin-top:28px;border:1px solid #e1eee7;background:linear-gradient(145deg,#fff,#fafffc);border-radius:22px;overflow:hidden;box-shadow:0 18px 50px #244d3b0d}
-.video-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;padding:20px}
-.video-drop{border:1px dashed #b9dccc;border-radius:17px;background:#fbfefc;padding:20px;text-align:center;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:250px}
-.video-drop h3{margin:10px 0 4px;font-size:15px}.video-drop p{margin:0 0 14px;color:#71877d;font-size:11px}
-.video-preview{display:none;width:100%;max-height:350px;background:#101816;border-radius:13px;margin-top:12px}
-.video-tools{border:1px solid #e1eee7;border-radius:16px;padding:17px;background:#f8fcf9}
-.video-tools h3{font-size:13px;margin:0 0 8px}.video-tools p{font-size:11px;line-height:1.6;color:#71877d}
-.video-tools label{display:block;font-size:11px;font-weight:800;margin:13px 0 6px}
-.video-tools input[type=range]{width:100%;accent-color:#087f5b}
-.video-status{font-size:11px;color:#58766a;min-height:35px;margin-top:12px}
-@media(max-width:850px){.video-grid{grid-template-columns:1fr}}
-
 </style>
 </head>
 <body>
 <header class="topbar">
 <a class="brand" href="https://shanpalia.github.io/WebsitePaliaAPK_V.2/" aria-label="PaliaAPK HUB home"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H9l1.5-2h3L15 5h2.5A2.5 2.5 0 0 1 20 7.5v10a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.5" r="3.5"/></svg></span><span class="brand-copy"><span class="brand-name">My Watermark Remover</span><span class="brand-sub">A PaliaAPK HUB Studio tool</span></span></a>
-<nav class="nav"><a href="#workspace">Workspace</a><a href="#features">How it works</a><span class="nav-pill">✦ BUILT BY PALIAAPK HUB</span></nav>
+<nav class="nav"><a href="#workspace">Image remover</a><a href="video.html">Video remover ↗</a><a href="#features">How it works</a><span class="nav-pill">✦ BUILT BY PALIAAPK HUB</span></nav>
 </header>
 <main>
 <section class="hero">
-<div class="hero-copy"><div class="eyebrow"><span class="pulse"></span> CREATIVE TOOLS · REIMAGINED</div><h1>Make your images<br><span class="gradient">feel brand new.</span></h1><p>A cleaner, calmer workspace for your image cleanup workflow. Bring in a photo, preview it instantly, and get ready for AI-powered removal when processing is connected.</p><div class="hero-actions"><button class="btn primary" id="heroUpload">↑ &nbsp; Upload an image</button><a class="btn secondary" href="#workspace" style="text-decoration:none">Explore workspace ↘</a></div><div class="byline"><span class="avatar">P</span><span><strong>PaliaAPK HUB Studio</strong><small>Designed & developed by shanpalia</small></span></div></div>
+<div class="hero-copy"><div class="eyebrow"><span class="pulse"></span> CREATIVE TOOLS · REIMAGINED</div><h1>Make your images<br><span class="gradient">feel brand new.</span></h1><p>A cleaner, calmer workspace for your image cleanup workflow. Bring in a photo, preview it instantly, and get ready for AI-powered removal when processing is connected.</p><div class="hero-actions"><button class="btn primary" id="heroUpload">↑ &nbsp; Upload an image</button><a class="btn secondary" href="#workspace" style="text-decoration:none">Explore workspace ↘</a><a class="btn secondary" href="video.html" style="text-decoration:none">▶ Video watermark remover</a></div><div class="byline"><span class="avatar">P</span><span><strong>PaliaAPK HUB Studio</strong><small>Designed & developed by shanpalia</small></span></div></div>
 <div class="hero-art" aria-hidden="true"><div class="orb"></div><div class="art-card"><div class="art-top"><span class="art-label">Image cleanup studio</span><span class="art-status">✦ SMART WORKSPACE</span></div><div class="art-preview"><div class="landscape"></div><div class="scanline"></div></div><div class="art-bottom"><span><strong>Image preview</strong><br>Refined creative workflow</span><span>01 / 02</span></div></div><div class="floating-tag"><b>✦ Your creative space</b><span>Made for your next great image</span></div></div>
 </section>
 <div class="section-head" id="workspace"><div><h2>Your workspace</h2><p>Start with a photo. The page will show a local preview.</p></div><span class="step-count">STEP 01 — SELECT</span></div>
@@ -69,30 +56,6 @@ footer{border-top-color:#e1eee7;color:#71877d}.footbrand b{color:#244b3b}.footbr
 <div id="preview" class="preview"><img id="previewImage" alt="Selected image preview"></div>
 <div class="toolbar"><div class="toolrow"><label for="brush">Brush size</label><small>UI preview control</small></div><div class="brush"><input type="range" id="brush" min="8" max="80" value="30"><output id="brushValue">30 px</output></div><div class="actions"><button class="btn secondary" id="resetBtn" type="button">Reset</button><button class="btn primary" id="processBtn" type="button">Clean selected area ↗</button></div><div class="status" id="status" role="status">Choose an image to begin.</div></div></div>
 <aside class="panel"><div class="panel-head"><div><div class="panel-title">Your next step</div><div class="panel-sub">A transparent look at what's available</div></div><span class="number">02</span></div><div class="side-content"><div class="preview-placeholder" id="resultPlaceholder"><div class="placeholder-icon">✧</div><b>Your image journey starts here</b><p>Upload a photo to see a preview in the workspace.</p></div><div class="side-features" id="features"><div class="feature"><span class="feature-icon">⌁</span><div><b>Image preview</b><p>Choose an image and preview it locally before taking the next step.</p></div></div><div class="feature"><span class="feature-icon">◈</span><div><b>Simple, focused controls</b><p>A tidy workspace designed to feel natural on desktop and mobile.</p></div></div><div class="feature"><span class="feature-icon">♧</span><div><b>Privacy-first preview</b><p>Your selected image is displayed in your browser and is not sent to a server.</p></div></div></div></div><div class="notice">Processing status: the AI watermark-removal backend is not connected to this static page. The Clean button will not fake a result or alter your image.</div></aside>
-</section>
-
-<section class="video-panel" id="video-remover">
-  <div class="panel-head"><div><div class="panel-title">Video Watermark Remover</div><div class="panel-sub">Video tool entry point · preview your clip here</div></div><span class="number">VIDEO</span></div>
-  <div class="video-grid">
-    <div class="video-drop" id="videoDrop">
-      <div class="upload-icon"><span style="font-size:23px">▶</span></div>
-      <h3 id="videoTitle">Choose a video to preview</h3>
-      <p>MP4, MOV or WEBM · Local browser preview</p>
-      <button class="btn primary" id="videoChoose" type="button">Choose video ↗</button>
-      <input class="hidden" id="videoInput" type="file" accept="video/mp4,video/quicktime,video/webm">
-      <video class="video-preview" id="videoPreview" controls playsinline></video>
-    </div>
-    <div class="video-tools">
-      <h3>Mark the watermark area</h3>
-      <p>This section is where the video watermark-removal workflow belongs. At present, it can preview a selected video, but there is no connected video-processing engine to erase a watermark.</p>
-      <label for="videoAreaSize">Selection brush size</label>
-      <input id="videoAreaSize" type="range" min="10" max="100" value="35">
-      <div class="toolrow"><small>Brush size</small><output id="videoBrushValue">35 px</output></div>
-      <button class="btn primary" id="videoRemove" type="button" style="width:100%">Remove watermark from video</button>
-      <div class="video-status" id="videoStatus" role="status">Choose a video first. No file is uploaded to a server.</div>
-    </div>
-  </div>
-  <div class="notice">Important: video watermark removal is not active yet. This is a real local video preview only; the remove button will not fake a processed result.</div>
 </section>
 
 <section class="stats"><div class="stat"><span class="stat-icon">↥</span><div><b>Fast image selection</b><span>Pick or drop a file</span></div></div><div class="stat"><span class="stat-icon">◉</span><div><b>Responsive by design</b><span>Desktop and mobile ready</span></div></div><div class="stat"><span class="stat-icon">✦</span><div><b>By PaliaAPK HUB</b><span>Developer By shanpalia</span></div></div></section>
@@ -105,15 +68,6 @@ $('fileInput').addEventListener('change',e=>{const f=e.target.files&&e.target.fi
 function loadImage(file){if(!/^image\/(png|jpeg|webp)$/.test(file.type)){$('status').textContent='Please choose a PNG, JPG or WEBP image.';return}if(file.size>25*1024*1024){$('status').textContent='This image is over 25 MB. Please choose a smaller file.';return}if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=URL.createObjectURL(file);$('previewImage').src=imageUrl;$('preview').style.display='flex';$('resultPlaceholder').classList.add('hidden');$('dropTitle').textContent=file.name;$('status').textContent='Image loaded for local preview. AI processing is not connected.'}
 $('dropzone').addEventListener('dragover',e=>{e.preventDefault();$('dropzone').classList.add('drag')});$('dropzone').addEventListener('dragleave',()=>$('dropzone').classList.remove('drag'));$('dropzone').addEventListener('drop',e=>{e.preventDefault();$('dropzone').classList.remove('drag');const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f)loadImage(f)});
 $('brush').addEventListener('input',e=>$('brushValue').textContent=e.target.value+' px');$('resetBtn').addEventListener('click',()=>{$('brush').value=30;$('brushValue').textContent='30 px';$('status').textContent='Controls reset. No image has been modified.'});$('processBtn').addEventListener('click',()=>{$('status').textContent=imageUrl?'AI processing backend is not configured. No result was generated and your image remains unchanged.':'Choose an image first.'});
-
-const videoInput=$('videoInput'),videoPreview=$('videoPreview');let videoUrl=null;
-$('videoChoose').addEventListener('click',()=>videoInput.click());
-videoInput.addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('video/')){$('videoStatus').textContent='Please choose a supported video file.';return}if(videoUrl)URL.revokeObjectURL(videoUrl);videoUrl=URL.createObjectURL(f);videoPreview.src=videoUrl;videoPreview.style.display='block';$('videoTitle').textContent=f.name;$('videoStatus').textContent='Video loaded for local preview. Watermark removal is not connected.'});
-$('videoAreaSize').addEventListener('input',e=>$('videoBrushValue').textContent=e.target.value+' px');
-$('videoRemove').addEventListener('click',()=>$('videoStatus').textContent=videoUrl?'Video preview is ready, but no video-removal engine is connected. No processed file was created.':'Choose a video first.');
-$('videoDrop').addEventListener('dragover',e=>{e.preventDefault();$('videoDrop').classList.add('drag')});
-$('videoDrop').addEventListener('dragleave',()=>$('videoDrop').classList.remove('drag'));
-$('videoDrop').addEventListener('drop',e=>{e.preventDefault();$('videoDrop').classList.remove('drag');const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f&&f.type.startsWith('video/')){if(videoUrl)URL.revokeObjectURL(videoUrl);videoUrl=URL.createObjectURL(f);videoPreview.src=videoUrl;videoPreview.style.display='block';$('videoTitle').textContent=f.name;$('videoStatus').textContent='Video loaded for local preview. Watermark removal is not connected.'}});
 
 </script>
 </body></html>
