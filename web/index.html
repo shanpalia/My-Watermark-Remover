@@ -37,6 +37,18 @@ footer{border-top-color:#e1eee7;color:#71877d}.footbrand b{color:#244b3b}.footbr
 @media(max-width:480px){.topbar{background:#ffffffed}}
 
 
+
+/* Premium Image / Video mode tabs */
+.mode-switch{display:flex;gap:6px;align-items:center;padding:6px;border:1px solid #dcebe3;background:#eef7f2;border-radius:16px;width:max-content;max-width:100%;margin:0 0 25px;box-shadow:0 6px 22px #244d3b08}
+.mode-tab{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;border:1px solid transparent;border-radius:11px;padding:11px 18px;color:#547164;font-size:12px;font-weight:850;white-space:nowrap;transition:background .18s,transform .18s,box-shadow .18s}
+.mode-tab:hover{background:#fff;color:#087f5b;transform:translateY(-1px)}
+.mode-tab.active{background:linear-gradient(135deg,#087f5b,#0b9b6b);color:#fff;box-shadow:0 6px 17px #087f5b28}
+.mode-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:#ffffff24;font-size:15px}
+.mode-tab:not(.active) .mode-icon{background:#fff;color:#087f5b}
+.mode-label{display:flex;flex-direction:column;align-items:flex-start;line-height:1.25}
+.mode-label small{font-size:9px;font-weight:600;opacity:.78;margin-top:3px}
+@media(max-width:480px){.mode-switch{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:5px}.mode-tab{padding:9px 8px;gap:7px;font-size:11px}.mode-icon{width:26px;height:26px}.mode-label small{font-size:8px}}
+
 </style>
 </head>
 <body>
@@ -45,6 +57,10 @@ footer{border-top-color:#e1eee7;color:#71877d}.footbrand b{color:#244b3b}.footbr
 <nav class="nav"><a href="#workspace">Image remover</a><a href="video.html">Video remover ↗</a><a href="#features">How it works</a><span class="nav-pill">✦ BUILT BY PALIAAPK HUB</span></nav>
 </header>
 <main>
+<div class="mode-switch" role="tablist" aria-label="Choose watermark remover">
+<a class="mode-tab active" role="tab" aria-selected="true" href="./index.html"><span class="mode-icon">▧</span><span class="mode-label">Image Remover<small>PHOTO WATERMARKS</small></span></a>
+<a class="mode-tab" role="tab" aria-selected="false" href="./video.html"><span class="mode-icon">▶</span><span class="mode-label">Video Remover<small>VIDEO WATERMARKS</small></span></a>
+</div>
 <section class="hero">
 <div class="hero-copy"><div class="eyebrow"><span class="pulse"></span> CREATIVE TOOLS · REIMAGINED</div><h1>Make your images<br><span class="gradient">feel brand new.</span></h1><p>A cleaner, calmer workspace for your image cleanup workflow. Bring in a photo, preview it instantly, and get ready for AI-powered removal when processing is connected.</p><div class="hero-actions"><button class="btn primary" id="heroUpload">↑ &nbsp; Upload an image</button><a class="btn secondary" href="#workspace" style="text-decoration:none">Explore workspace ↘</a><a class="btn secondary" href="video.html" style="text-decoration:none">▶ Video watermark remover</a></div><div class="byline"><span class="avatar">P</span><span><strong>PaliaAPK HUB Studio</strong><small>Designed & developed by shanpalia</small></span></div></div>
 <div class="hero-art" aria-hidden="true"><div class="orb"></div><div class="art-card"><div class="art-top"><span class="art-label">Image cleanup studio</span><span class="art-status">✦ SMART WORKSPACE</span></div><div class="art-preview"><div class="landscape"></div><div class="scanline"></div></div><div class="art-bottom"><span><strong>Image preview</strong><br>Refined creative workflow</span><span>01 / 02</span></div></div><div class="floating-tag"><b>✦ Your creative space</b><span>Made for your next great image</span></div></div>
