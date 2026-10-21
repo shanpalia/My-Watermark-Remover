@@ -1,32 +1,40 @@
 # My Watermark Remover
 
-Android app by **PaliaAPK HUB** — **Developer By shanpalia**.
+PaliaAPK HUB · Developer By shanpalia.
 
-## Current implementation
+## Online AI inpainting backend
 
-- Native Android app written in Kotlin.
-- White and mint/emerald theme.
-- Select an image from the device.
-- Paint over a watermark area with a touch brush and reset the mask.
-- Remove the selected area offline using OpenCV Telea inpainting.
-- Save the result to the Pictures folder.
-- Large images are scaled down to a maximum dimension of 1800 px to reduce memory use.
+The GitHub Pages UI can use a separately deployed FastAPI backend. It calls the Replicate `allenhooo/lama` inpainting model to fill the selected rectangular region. The Replicate token stays on the server and must never be placed in browser JavaScript or committed to Git.
 
-## Build a debug APK
+### Deploy the backend on Render
 
-1. Open the **Actions** tab.
-2. Select **Build Android APK**.
-3. Run the workflow, or push a commit to `main`.
-4. When the run succeeds, download the artifact named `My-Watermark-Remover-debug-apk`.
+1. Create a Replicate account and create an API token at https://replicate.com/account/api-tokens. AI predictions and file uploads can incur charges; check current pricing before processing videos.
+2. In Render, create a Web Service from this repository, or use the included `render.yaml` Blueprint. If creating manually, set **Root Directory** to `backend`, **Build Command** to `pip install -r requirements.txt`, and **Start Command** to `uvicorn app:app --host 0.0.0.0 --port $PORT`.
+3. Add `REPLICATE_API_TOKEN` as a secret environment variable in Render. Never put this token in GitHub or the webpage.
+4. Once deployed, copy the Render service URL (for example, `https://your-service.onrender.com`) into the **Backend URL** field on both the image and video pages, then press **Connect backend**. The pages save the URL in that browser.
+5. Confirm the backend health response shows `configured: true`. If false, add the token in Render and redeploy.
 
-## Important limitations
+### API behavior
 
-This version implements **image** cleanup with classical OpenCV inpainting, not a neural AI model. Video watermark removal, cloud/online AI processing, subscriptions, and the full visual mockup's secondary screens are not implemented yet. Results depend on the selected mask and may not perfectly reconstruct complex backgrounds.
+- Image: `POST /api/inpaint/image`, multipart fields `image, x, y, w, h, brush`. Returns a PNG only when AI produces a valid result.
+- Video: `POST /api/inpaint/video`, multipart fields `video, x, y, w, h, brush`. Processes frames with LaMa and returns an MP4 with source audio where present.
+- Video beta limit: 10 seconds and 80 MB; processed at 12 fps. Every frame invokes the AI model separately, so video can take time and cost significantly more than one image. It may have a lower frame rate than the original.
+- Backend limits: image 20 MB. Processing errors are returned as errors; the UI does not display a fake success.
+- Replicate receives the uploaded source image/video frames and masks. Review Replicate's current pricing and data-retention terms before use.
 
-GitHub Actions builds the APK; it is not a processing server. Online processing requires a separately deployed backend/API. Do not commit API secrets to this repository.
+### Local backend
 
-## Branding
+```bash
+cd backend
+python -m venv .venv
+# activate the environment, then:
+pip install -r requirements.txt
+export REPLICATE_API_TOKEN=your_token_here
+uvicorn app:app --reload --port 8000
+```
 
-- App: My Watermark Remover
-- Platform: PaliaAPK HUB
-- Developer: Developer By shanpalia
+Then enter `http://127.0.0.1:8000` as the backend URL in the webpage. Never commit a real token.
+
+## Android project
+
+The repository also contains a native Android app. Its existing OpenCV-based offline image cleanup is separate from the online web backend and is not automatically connected to the Render API.
